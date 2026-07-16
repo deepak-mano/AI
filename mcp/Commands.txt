@@ -1,0 +1,14 @@
+**************************************************
+creating react agent using langchain
+
+pip install virtualenv
+virtualenv .venv
+source .venv/bin/activate
+
+pip install langgraph==0.6.6
+pip install langchain==0.3.27
+pip install langchain-openai==0.3.32
+pip install langchain-mcp-adapters==0.1.9
+
+
+****************************************************

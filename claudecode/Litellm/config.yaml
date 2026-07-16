@@ -1,0 +1,26 @@
+model_list:
+  - model_name: nemotron-ultra
+    litellm_params:
+      model: "nvidia_nim/nvidia/nemotron-3-ultra-550b-a55b"
+      api_key: "os.environ/NVIDIA_NIM_API_KEY"
+      api_base: "https://integrate.api.nvidia.com/v1"
+
+  - model_name: claude-3-5-sonnet-20241022
+    litellm_params:
+      model: "nvidia_nim/nvidia/nemotron-3-ultra-550b-a55b"
+      api_key: "os.environ/NVIDIA_NIM_API_KEY"
+      api_base: "https://integrate.api.nvidia.com/v1"
+
+  - model_name: claude-opus-4-8 
+    litellm_params:
+      model: "nvidia_nim/z-ai/glm-5.2"
+      api_key: "os.environ/NVIDIA_NIM_API_KEY"
+      api_base: "https://integrate.api.nvidia.com/v1"
+
+router_settings:
+  enable_anthropic_pass_through: true 
+
+litellm_settings:
+  drop_params: true
+  modify_params: true
+  additional_drop_params: ["output_config"]

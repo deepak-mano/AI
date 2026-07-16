@@ -1,0 +1,3 @@
+mcp_stdio_test.py  -> performs operations on context7 based on user queries. The connection is an stdio connection to context7 mcp server
+mcp_http_test.py  -> performs operations on context7 based on user queries. The connection is an stdio connection to context7 mcp server
+mcp_chatbot.py   ->  chatbot intergation with an agent which connect to context7(stdio) mcp server and metmuseum(http) and provide the results. This connection depends on the litellm procy for nvidia nim models.

@@ -1,0 +1,111 @@
+TABLE RELATIONSHIP FLOW CHART DESIGN
+=====================================
+
+                    ┌─────────────────────────────────────┐
+                    │              USERS                  │
+                    ├─────────────────────────────────────┤
+                    │ PRIMARY KEY: user_id (SERIAL)       │
+                    │ email (VARCHAR(255) UNIQUE)         │
+                    │ first_name (VARCHAR(100))           │
+                    │ last_name (VARCHAR(100))            │
+                    │ created_at (TIMESTAMP)              │
+                    └─────────────────────────────────────┘
+                                      │
+                                      │ 1:N (One-to-Many)
+                                      │
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │              ORDERS                 │
+                    ├─────────────────────────────────────┤
+                    │ PRIMARY KEY: order_id (SERIAL)      │
+                    │ user_id (INT, FK → users.user_id)   │
+                    │ order_date (TIMESTAMP)              │
+                    │ total_amount (DECIMAL(10,2))        │
+                    │ status (VARCHAR(50))                │
+                    └─────────────────────────────────────┘
+                                      │
+                                      │ Contains
+                                      │
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │           ORDER_ITEMS               │
+                    ├─────────────────────────────────────┤
+                    │ PRIMARY KEY: order_item_id (SERIAL) │
+                    │ order_id (INT, FK → orders)         │
+                    │ product_id (INT, FK → products)     │
+                    │ quantity (INT, CHECK > 0)           │
+                    │ unit_price (DECIMAL(10,2))          │
+                    └─────────────────────────────────────┘
+                                      │
+                                      │ N:1 (Many-to-One)
+                                      │
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │             PRODUCTS                │
+                    ├─────────────────────────────────────┤
+                    │ PRIMARY KEY: product_id (SERIAL)    │
+                    │ name (VARCHAR(255))                 │
+                    │ price (DECIMAL(10,2))               │
+                    │ stock_quantity (INT)                │
+                    │ sku (VARCHAR(50) UNIQUE)            │
+                    └─────────────────────────────────────┘
+
+
+CASCADE DELETE BEHAVIOR:
+========================
+┌─────────────────────────────────────────────────────────────────────┐
+│                        USER DELETION                                │
+│                                                                     │
+│  Users ───DELETE CASCADE──► Orders ───DELETE CASCADE──► Order_Items │
+│                                                                     │
+│  Products ───DELETE RESTRICT──X (cannot delete if referenced)       │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+MAPPING FLOW CHART:
+===================
+
+    ┌─────────────┐
+    │    USER     │
+    │  (INSERT)   │
+    └──────┬──────┘
+           │ creates
+           ▼
+    ┌─────────────┐           ┌─────────────┐
+    │   ORDER     │◄──────────┤   USER      │
+    │  (INSERT)   │           │  (EXISTS)   │
+    └──────┬──────┘           └─────────────┘
+           │ contains
+           ▼
+    ┌─────────────┐           ┌─────────────┐
+    │ORDER_ITEM   │◄──────────┤  PRODUCT    │
+    │  (INSERT)   │           │  (EXISTS)   │
+    └─────────────┘           └─────────────┘
+
+
+RELATIONSHIP MATRIX:
+====================
+┌─────────────┬──────────┬──────────────┬─────────────┬─────────────┐
+│   TABLE     │  PK      │  K REFERENCES│  RELATION   │  CASCADE    │
+├─────────────┼──────────┼──────────────┼─────────────┼─────────────┤
+│ users       │user_id   │ -            │ 1:N Orders  │ -           │
+│ orders      │order_id  │users.user_id │ N:1 Users   │ CASCADE     │
+│ order_items │order_id  │orders.order_id│ N:1 Orders │ CASCADE     │
+│             │product_id│products.id   │ N:1 Products│ RESTRICT    │
+│ products    │product_id│ -            │ 1:N Order_It│ -           │
+└─────────────┴──────────┴──────────────┴─────────────┴─────────────┘
+
+
+QUERY PATH EXAMPLES:
+====================
+1. Get all orders for a user:
+   SELECT * FROM orders o JOIN users u ON o.user_id = u.user_id WHERE u.email = ?
+
+2. Get all products in an order:
+   SELECT p.* FROM products p
+   JOIN order_items oi ON p.product_id = oi.product_id
+   WHERE oi.order_id = ?
+
+3. Get order summary with user info:
+   SELECT u.first_name, o.order_date, o.total_amount
+   FROM orders o JOIN users u ON o.user_id = u.user_id
