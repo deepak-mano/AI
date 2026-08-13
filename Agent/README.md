@@ -7,3 +7,5 @@ manual_tool.py  ==> Peform calculator operation using manual tool calling
 Wiki ==> uses wiki search service from langchain library using tools without any agent or llm
 
 Youtube.py  ==> Youtube agent that performs youtube operations based on the tools and llm reasoning. This program also provides the detail of the orchestration to get an understanding how the flow works. This is a part of IBM course excercise and its customized with additional details for clarity  
+
+dbagent ==> performs prompt based query on mysql database using langchain sql agent and llm
