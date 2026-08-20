@@ -1,0 +1,4 @@
+a=input("enter number 1 : ")
+b=input("enter number 1 : ")
+c=a+b
+print(f'Sum of {a} and {b} is {c} )

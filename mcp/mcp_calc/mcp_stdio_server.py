@@ -17,11 +17,27 @@ print('mcp object',mcp)
 
 @mcp.tool
 def multiply(a: int, b: int) -> int:
-   return a * b
+    """ 
+    Multiplies the inputs a  and b and return the product
+   
+    input:  a   :   int
+            b   :   int
+
+    output: a * b :   int  
+    """
+    return a * b
 
 
 @mcp.tool
 def division(a: int, b: int) -> int:
+    """ 
+    divides the input a from b and return the result
+    
+    input:  a   :   int
+            b   :   int
+
+    output: a / b :   int  
+    """
     return a // b
 
 """
