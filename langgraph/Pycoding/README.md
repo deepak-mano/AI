@@ -2,9 +2,7 @@
 
 
 UI ( Java Springboot webApp with Python backend):
-
-![alt text](image.png)
-![alt text](image-1.png)
+![alt text](image-2.png)
 
 Turn a plain English description of a program into Python code, one step at a time.
 
